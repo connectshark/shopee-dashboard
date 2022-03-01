@@ -1,7 +1,10 @@
 <script setup>
+import HeaderWrapper from './components/headerWrapper.vue'
 </script>
 
 <template>
-<h1 class=" text-center text-3xl text-blue-500 font-mono">Hello</h1>
-  <router-view />
+  <HeaderWrapper/>
+  <main>
+    <router-view />
+  </main>
 </template>
