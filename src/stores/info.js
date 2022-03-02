@@ -7,6 +7,5 @@ export const useInfoStore = defineStore('info', {
   getters: {
   },
   actions: {
-    
   }
 })
