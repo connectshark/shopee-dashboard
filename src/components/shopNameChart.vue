@@ -7,7 +7,7 @@ import { ref } from "vue"
 
 export default {
   props: {
-    totalOrderShopName: Array
+    filterOrderShopName: Array
   },
   setup (props) {
     const option = ref({
@@ -22,20 +22,23 @@ export default {
       yAxis: {},
       xAxis: {
         type: 'category',
+        splitLine: { show: false },
         name: '店名',
-        data: props.totalOrderShopName.map(shop => shop.name.slice(0, 3))
+        data: props.filterOrderShopName.map(shop => shop.name.slice(0, 3))
       },
       tooltip: {
         trigger: "item",
-        formatter: "{a} <br/>{b} : {c}"
+        formatter: "{b} : {c}"
       },
       series: [
         {
           name: "店家名稱",
           type: 'bar',
-          data: props.totalOrderShopName,
+          data: props.filterOrderShopName,
           label: {
-            formatter: '{b} \n {c}',
+            show: true,
+            formatter: '{c}次',
+            position: 'inside'
           },
           emphasis: {
             itemStyle: {
