@@ -1,5 +1,8 @@
 <template>
-  <v-chart class=" h-80 md:h-60" :option="option" :autoresize="true"/>
+<div class=" py-4">
+  <h3 class=" font-bold text-xl">統計消費店家類型</h3>
+  <v-chart class=" h-60 md:h-80" :option="option" :autoresize="true"/>
+</div>
 </template>
 
 <script>
@@ -17,10 +20,6 @@ export default {
       }
     })
     const option = ref({
-      title: {
-        text: "統計消費店家類型",
-        left: "center"
-      },
       tooltip: {
         trigger: "item",
         formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -30,7 +29,7 @@ export default {
           name: "店家類型",
           type: "pie",
           radius: "35%",
-          center: ["50%", "40%"],
+          center: ["50%", "50%"],
           data: data,
           label: {
             formatter: '{b} \n {c} {d}%',

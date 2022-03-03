@@ -1,5 +1,8 @@
 <template>
-  <v-chart class=" h-80 md:h-60" :option="option" :autoresize="true"/>
+<div class=" py-4">
+  <h3 class=" font-bold text-xl">最常消費店家名稱(前5名)</h3>
+  <v-chart class=" h-60 md:h-80" :option="option" :autoresize="true"/>
+</div>
 </template>
 
 <script>
@@ -11,10 +14,6 @@ export default {
   },
   setup (props) {
     const option = ref({
-      title: {
-        text: "最常消費店家名稱(前5名)",
-        left: "center"
-      },
       grid: {
         right: '15%',
         left: '15%',

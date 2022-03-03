@@ -40,7 +40,7 @@ const api = {
       .then(data => resolve(data))
       .catch(err => reject(err))
     })
-  }
+  },
 }
 
 export default api
