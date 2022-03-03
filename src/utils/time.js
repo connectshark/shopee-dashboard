@@ -6,8 +6,7 @@ const time = {
    */
   getLastMonth () {
     const first = dayjs(dayjs().subtract(1, 'month').format('YYYY-MM-') + '1').unix()
-    const lastDay = dayjs().subtract(1, 'month').daysInMonth()
-    const last = dayjs(dayjs().subtract(1, 'month').format('YYYY-MM-') + lastDay).unix()
+    const last = dayjs(dayjs().format('YYYY-MM-') + '1').unix()
     return {
       first,
       last

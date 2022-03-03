@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useInfoStore } from '../stores/info'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -7,6 +8,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      beforeEnter: (to, from, next) => {
+        const store = useInfoStore()
+        if (store.token) {
+          next()
+        } else {
+          next({ path: '/login' })
+        }
+      },
       component: HomeView
     },
     {

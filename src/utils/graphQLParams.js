@@ -17,7 +17,9 @@ const graphQLParams = {
             utmContent
             referrer
             orders {
+              shopType
               items {
+                shopName
                 actualAmount
               }
             }
