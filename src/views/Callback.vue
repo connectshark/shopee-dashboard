@@ -22,7 +22,7 @@ export default {
           detail.value = res.err.detail
         } else {
           store.token = res
-          router.push('/')
+          router.replace('/b')
         }
       })
     

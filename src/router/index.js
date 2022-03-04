@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useInfoStore } from '../stores/info'
 import HomeView from '../views/HomeView.vue'
+import BoardView from '../views/BoardView.vue'
+
 const routes = [
   {
     path: '/',
@@ -16,8 +18,7 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/month',
-    name: 'month',
+    path: '/b',
     beforeEnter: (to, from, next) => {
       const store = useInfoStore()
       if (store.token) {
@@ -26,8 +27,26 @@ const routes = [
         next({ path: '/login' })
       }
     },
-    component: () => import('../views/Month.vue')
+    component: BoardView,
+    children: [
+      {
+        path: '',
+        name: 'range',
+        component: () => import('../views/RangeView.vue')
+      },
+      {
+        path: 'month',
+        name: 'month',
+        component: () => import('../views/Month.vue')
+      },
+      {
+        path: 'recent',
+        name: 'recent',
+        component: () => import('../views/RecentView.vue')
+      },
+    ]
   },
+  
   {
     path: '/login',
     name: 'login',

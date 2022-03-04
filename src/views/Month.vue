@@ -10,13 +10,13 @@
 <section v-else class=" w-11/12 mx-auto">
   <h2 class=" font-bold text-2xl py-2 text-emerald-700">{{ new Date().getMonth() }}月度總結</h2>
   <div class=" grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4">
-    <p class=" rounded-xl p-2 bg-slate-200">預估佣金: <i class='bx bx-dollar-circle' ></i>{{ store.totalCommission.toLocaleString() }}</p>
-    <p class=" rounded-xl p-2 bg-slate-200">訂單數量: {{ store.monthList.length.toLocaleString() }}筆</p>
-    <p class=" rounded-xl p-2 bg-slate-200">訂單金額: <i class='bx bx-dollar-circle' ></i>{{ store.totalOrderAmount.toLocaleString() }}</p>
-    <p class=" rounded-xl p-2 bg-slate-200" v-if="store.filterOrderShopName.length > 0">消費次數最多店家: {{ store.filterOrderShopName[0].name }}</p>
+    <p class=" rounded-xl p-2 bg-slate-200">預估佣金: <i class='bx bx-dollar-circle' ></i>{{ totalCommission.toLocaleString() }}</p>
+    <p class=" rounded-xl p-2 bg-slate-200">訂單數量: {{ monthList.length.toLocaleString() }}筆</p>
+    <p class=" rounded-xl p-2 bg-slate-200">訂單金額: <i class='bx bx-dollar-circle' ></i>{{ totalOrderAmount.toLocaleString() }}</p>
+    <p class=" rounded-xl p-2 bg-slate-200" v-if="filterOrderShopName.length > 0">消費次數最多店家: {{ filterOrderShopName[0].name }}</p>
     <p class=" rounded-xl p-2 bg-slate-200" v-else>消費次數最多店家: 無店家</p>
-    <ShopTypeChart v-if="!state.loading" :totalShopType="store.totalShopType"/>
-    <ShopNameChart v-if="!state.loading" :filterOrderShopName="store.filterOrderShopName"/>
+    <ShopTypeChart v-if="!state.loading" :totalShopType="totalShopType"/>
+    <ShopNameChart v-if="!state.loading" :filterOrderShopName="filterOrderShopName"/>
   </div>
 </section>
 
@@ -26,13 +26,13 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import Loading from '../components/loading.vue'
 import ShopTypeChart from '../components/shopTypeChart.vue'
-import { useInfoStore } from '../stores/info'
 import api from '../utils/api'
 import graphQLParams from '../utils/graphQLParams'
 import ShopNameChart from '../components/shopNameChart.vue'
+import { useInfoStore } from '../stores/info'
 
 export default {
   components: {
@@ -41,15 +41,15 @@ export default {
     ShopNameChart
   },
   setup () {
-    const rangeList = ref([])
     const store = useInfoStore()
+    const monthList = ref([])
     const state = reactive({
       loading: false,
       errMsg: false
     })
     const reload = () => {
       state.errMsg = false
-      store.monthList = []
+      monthList.value = []
       getList()
     }
 
@@ -58,7 +58,7 @@ export default {
       state.loading = true
       api.getProducts(graphQLParams.lastMonthQuery(scrollId), store.token)
         .then(res => {
-          store.monthList = [...store.monthList, ...res.data.conversionReport.nodes]
+          monthList.value = [...monthList.value, ...res.data.conversionReport.nodes]
           if (res.data.conversionReport.pageInfo.hasNextPage) {
             getList(res.data.conversionReport.pageInfo.scrollId)
           } else {
@@ -71,12 +71,79 @@ export default {
         })
     }
 
+    const totalCommission = computed(() => {
+      return monthList.value.reduce((sum, item) => {
+        sum += parseInt(item.estimatedTotalCommission)
+        return sum
+      }, 0)
+    })
+
+    const totalOrderAmount = computed(() => {
+      return monthList.value.reduce((sum, listItem) => {
+        listItem.orders.forEach(order => {
+          order.items.forEach(item => {
+            sum += parseInt(item.actualAmount)
+          })
+        })
+        return sum
+      }, 0)
+    })
+
+    const totalShopType = computed(() => {
+      return monthList.value.reduce((sum, listItem) => {
+        let name = {
+          C2C_NON_CB: '一般境內',
+          C2C_CB: '一般境外',
+          SHOPEE_MALL_CB: '商城境外',
+          SHOPEE_MALL_NON_CB: '商城境內',
+          PREFERRED_NON_CB:'優選境內',
+          PREFERRED_CB:'優選境外',
+        }
+        listItem.orders.forEach(order => {
+          sum[name[order.shopType]]++
+        })
+        return sum
+      }, {
+        一般境內: 0,
+        一般境外: 0,
+        優選境內: 0,
+        優選境外: 0,
+        商城境內: 0,
+        商城境外: 0
+      })
+    })
+
+    const filterOrderShopName = computed(() => {
+      let sumArray = []
+      const sum = monthList.value.reduce((sum, listItem) => {
+        listItem.orders.forEach(order => {
+          order.items.forEach(item => {
+            if (!sum[item.shopName]) {
+              sum[item.shopName] = 0
+            }
+            sum[item.shopName]++
+          })
+        })
+        return sum
+      }, {})
+      for ( const [key, value] of Object.entries(sum)) {
+        sumArray.push({
+          name: key,
+          value: value
+        })
+      }
+      return sumArray.sort((a, b) => a.value < b.value ? 1 : -1).filter((shop, index) => index < 5)
+    })
+
     getList()
     return {
       state,
-      store,
+      monthList,
       reload,
-      rangeList
+      totalCommission,
+      totalOrderAmount,
+      totalShopType,
+      filterOrderShopName
     }
   }
 }
