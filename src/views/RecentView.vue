@@ -70,7 +70,7 @@ export default {
     let scrollId = ''
     const getRange = (scroll = '') => {
       state.loading = true
-      api.getProducts(graphQLParams.getRangeQuery(scroll), store.token)
+      api.getProducts(graphQLParams.getRecentQuery(scroll), store.token)
         .then(res => {
           rangeList.value = [...rangeList.value, ...res.data.conversionReport.nodes]
           if (res.data.conversionReport.pageInfo.hasNextPage) {

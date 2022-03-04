@@ -7,7 +7,7 @@ import router from './router'
 
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { PieChart, BarChart } from "echarts/charts";
+import { PieChart, BarChart, LineChart } from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
@@ -19,6 +19,7 @@ import ECharts from "vue-echarts";
 use([
   CanvasRenderer,
   BarChart,
+  LineChart,
   PieChart,
   GridComponent,
   TitleComponent,

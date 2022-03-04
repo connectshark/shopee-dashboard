@@ -37,13 +37,19 @@ const routes = [
       {
         path: 'month',
         name: 'month',
-        component: () => import('../views/Month.vue')
+        component: () => import('../views/MonthView.vue')
       },
       {
         path: 'recent',
         name: 'recent',
         component: () => import('../views/RecentView.vue')
       },
+      {
+        path: '/:pathMatch(.*)*',
+        redirect: {
+          name: 'range'
+        }
+      }
     ]
   },
   

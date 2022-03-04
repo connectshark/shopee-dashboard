@@ -30,7 +30,35 @@ const graphQLParams = {
     }
   },
 
-  getRangeQuery (scrollId) {
+  getRangeQuery : (first, scrollId = '') => {
+    const last = dayjs(dayjs().format('YYYY-MM-DD')).unix()
+    return {
+      "query": `{
+        conversionReport(limit: 500, purchaseTimeStart: ${first}, scrollId: "${scrollId}", purchaseTimeEnd: ${last}) {
+          pageInfo {
+            scrollId
+            hasNextPage
+          }
+          nodes {
+            estimatedTotalCommission
+            purchaseTime
+            checkoutId
+            utmContent
+            referrer
+            orders {
+              shopType
+              items {
+                shopName
+                actualAmount
+              }
+            }
+          }
+        }
+      }`
+    }
+  },
+
+  getRecentQuery (scrollId) {
     return {
       "query": `{
         conversionReport(scrollId: "${scrollId}") {
