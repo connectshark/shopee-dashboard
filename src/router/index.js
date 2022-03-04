@@ -16,6 +16,19 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/month',
+    name: 'month',
+    beforeEnter: (to, from, next) => {
+      const store = useInfoStore()
+      if (store.token) {
+        next()
+      } else {
+        next({ path: '/login' })
+      }
+    },
+    component: () => import('../views/Month.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue')

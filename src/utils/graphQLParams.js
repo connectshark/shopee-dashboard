@@ -30,10 +30,10 @@ const graphQLParams = {
     }
   },
 
-  getRangeQuery (startTime, scrollId) {
+  getRangeQuery (scrollId) {
     return {
       "query": `{
-        conversionReport(limit: 500, purchaseTimeStart: ${dayjs(startTime).unix()}, scrollId: "${scrollId}", purchaseTimeEnd: ${dayjs(dayjs().format('YYYY-MM-DD')).unix()}) {
+        conversionReport(scrollId: "${scrollId}") {
           pageInfo {
             scrollId
             hasNextPage
@@ -41,8 +41,10 @@ const graphQLParams = {
           nodes {
             estimatedTotalCommission
             device
+            purchaseTime
             utmContent
             checkoutId
+            referrer
             orders {
               orderId
               shopType

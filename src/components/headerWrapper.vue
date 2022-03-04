@@ -4,10 +4,12 @@
       <h1>
         <router-link to="/" class=" font-bold"><i class='bx bx-chalkboard'></i>蝦皮電台</router-link>
       </h1>
-      <figure v-if="info.picture">
-        <img class=" inline-block w-4 align-middle" @error="$event.target.src = 'https://picsum.photos/16/16'" :src="info.picture" :alt="info.name">
-        <p class=" inline-block align-middle">{{ info.name }}</p>
-      </figure>
+      <template v-if="info.picture">
+        <figure>
+          <img class=" inline-block w-4 align-middle" @error="$event.target.src = 'https://picsum.photos/16/16'" :src="info.picture" :alt="info.name">
+          <p class=" inline-block align-middle">{{ info.name }}</p>
+        </figure>
+      </template>
       <div v-else>
         <router-link to="/login"><i class='bx bx-log-in'></i>登入</router-link>
       </div>
