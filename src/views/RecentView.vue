@@ -11,7 +11,7 @@
   <section class="pt-4">
     <h2 class=" font-bold text-2xl text-emerald-700">近日訂單</h2>
   </section>
-  <div class=" top-0 left-0 sticky backdrop-blur-md bg-white/30">
+  <div class=" top-0 left-0 sticky backdrop-blur-md bg-white/30 backdrop-saturate-150">
     <p class=" py-1">
       <span>{{rangeList.length}}筆  分潤合計: {{totalCommission}}元</span>
     </p>
@@ -24,6 +24,8 @@
           :estimatedTotalCommission="order.estimatedTotalCommission"
           :id="order.checkoutId"
           :orders="order.orders"
+          :referrer="order.referrer"
+          :utmContent="order.utmContent"
         />
       </ul>
       <p>
@@ -63,14 +65,14 @@ export default {
     const reload = () => {
       state.errMsg = false
       rangeList.value = []
-      getRange()
+      getRange(graphQLParams.getRecentQuery(scrollId))
     }
 
     let scrollTime = ''
     let scrollId = ''
-    const getRange = (scroll = '') => {
+    const getRange = (query) => {
       state.loading = true
-      api.getProducts(graphQLParams.getRecentQuery(scroll), store.token)
+      api.getProducts(query, store.token)
         .then(res => {
           rangeList.value = [...rangeList.value, ...res.data.conversionReport.nodes]
           if (res.data.conversionReport.pageInfo.hasNextPage) {
@@ -92,11 +94,14 @@ export default {
     })
 
     const getMore = () => {
-      let scroll = dayjs().unix() - scrollTime > 30 ? '' : scrollId
-      getRange(scroll)
+      if (dayjs().unix() - scrollTime > 30) {
+        getRange(graphQLParams.getLastTimeQuery(rangeList.value[rangeList.value.length -1].purchaseTime - 1))
+      } else {
+        getRange(graphQLParams.getRecentQuery(scrollId))
+      }
     }
 
-    getRange()
+    getRange(graphQLParams.getRecentQuery(scrollId))
     return {
       state,
       store,

@@ -92,6 +92,41 @@ const graphQLParams = {
         }
       }`
     }
+  },
+  getLastTimeQuery (purchaseTimeEnd) {
+    return {
+      "query": `{
+        conversionReport(purchaseTimeEnd: "${purchaseTimeEnd}") {
+          pageInfo {
+            scrollId
+            hasNextPage
+          }
+          nodes {
+            estimatedTotalCommission
+            device
+            purchaseTime
+            utmContent
+            checkoutId
+            referrer
+            orders {
+              orderId
+              shopType
+              items {
+                shopId
+                shopName
+                completeTime
+                itemId
+                itemName
+                itemPrice
+                itemCommission
+                qty
+                imageUrl
+              }
+            }
+          }
+        }
+      }`
+    }
   }
 }
 
