@@ -30,31 +30,29 @@ const graphQLParams = {
     }
   },
 
-  getRangeQuery : (first, scrollId = '') => {
-    const last = dayjs(dayjs().format('YYYY-MM-DD')).unix()
+  getShopeeOffer : () => {
     return {
       "query": `{
-        conversionReport(limit: 500, purchaseTimeStart: ${first}, scrollId: "${scrollId}", purchaseTimeEnd: ${last}) {
-          pageInfo {
-            scrollId
-            hasNextPage
-          }
+        shopeeOfferV2(limit: 50) {
           nodes {
-            estimatedTotalCommission
-            purchaseTime
-            checkoutId
-            utmContent
-            referrer
-            orders {
-              shopType
-              items {
-                shopName
-                actualAmount
-              }
-            }
+            offerName
+            offerLink
+            originalLink
+            imageUrl
+            collectionId
+            categoryId
+            commissionRate
+            periodEndTime
+            periodStartTime
+          }
+          pageInfo {
+            page
+            hasNextPage
+            limit
           }
         }
-      }`
+      }
+      `
     }
   },
 

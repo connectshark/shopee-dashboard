@@ -1,68 +1,33 @@
 <template>
 <section>
-  <h2 class=" font-bold text-2xl">蝦皮分潤儀表板</h2>
-  <p>快速查看近期內容</p>
-  <div>
-    <label>
-      <input class=" appearance-none ring-1 rounded p-2" type="date" :max="dayjs().format('YYYY-MM-DD')" :min="dayjs(dayjs().subtract(3, 'M')).format('YYYY-MM-DD')" v-model="startTime">
-    </label>
-  </div>
+  <ul class=" gap-4 grid grid-cols-1 w-5/6 mx-auto lg:grid-cols-2 xl:grid-cols-3">
+    <li class="flex" v-for="item in list" :key="item.categoryId">
+      <img class=" mr-4 object-cover w-20 h-20" :src="item.imageUrl" :alt="item.categoryId">
+      <div class=" text-left w-full">
+        <p>{{ item.offerName }}</p>
+        <p>{{ dayjs.unix(item.periodStartTime).format('M/DD') }} ~ {{ dayjs.unix(item.periodEndTime).format('M/DD') }} </p>
+        <p @click="copy(item.offerLink)" class=" bg-gray-700 text-white p-1 rounded">{{ item.offerLink }} <i class='bx bx-copy'></i></p>
+      </div>
+    </li>
+  </ul>
 </section>
-<section>
-  <h3></h3>
-  <p>{{ list.length }}</p>
-  <DateLineChart v-if="lineView" :lineView="lineView"/>
-</section>
-  
-<Teleport to="#modal">
-  <Loading  v-if="state.loading"/>
-</Teleport>
 </template>
 
 <script setup>
-import dayjs from 'dayjs'
-import Loading from '../components/loading.vue'
-import { computed, reactive, ref } from 'vue'
-import { useInfoStore } from '../stores/info'
-import api from '../utils/api'
 import graphQLParams from '../utils/graphQLParams'
-import DateLineChart from '../components/dateLineChart.vue'
+import api from '../utils/api'
+import { useInfoStore } from '../stores/info'
+import { ref } from 'vue'
+import dayjs from 'dayjs'
+import copy from 'copy-text-to-clipboard'
 
 
 const list = ref([])
-const state = reactive({
-  loading: false
-})
+
 const store = useInfoStore()
-const startTime = ref(dayjs().subtract(7, 'd').format('YYYY-MM-DD'))
-
-const getRange = (scrollId = '') => {
-  state.loading = true
-  api.getProducts(graphQLParams.getRangeQuery(dayjs(startTime.value).unix(), scrollId), store.token)
+api.getProducts(graphQLParams.getShopeeOffer(), store.token)
   .then(res => {
-      list.value = [...list.value, ...res.data.conversionReport.nodes]
-      if (res.data.conversionReport.pageInfo.hasNextPage) {
-        getRange(res.data.conversionReport.pageInfo.scrollId)
-      } else {
-        state.loading = false
-      }
+    console.log(res)
+    list.value = res.data.shopeeOfferV2.nodes
   })
-  .catch(() => {
-
-  })
-}
-
-const lineView = computed(() => {
-  return list.value.reduce((sum, checkout) => {
-    const ymd = dayjs.unix(checkout.purchaseTime).format('YYYY-MM-DD')
-    if (!sum[ymd]) {
-      sum[ymd] = 0
-    }
-    sum[ymd]++
-    return sum
-  }, {})
-})
-
-
-// getRange()
 </script>
