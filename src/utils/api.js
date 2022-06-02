@@ -1,18 +1,6 @@
 const BASE_URL = import.meta.env.VITE_API_URL
 
 const api = {
-  getUserDetail (token) {
-    return new Promise((resolve, reject) => {
-      fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', {
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      })
-        .then(j => j.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err))
-    })
-  },
   oauthLogin (code) {
     return new Promise((resolve, reject) => {
       fetch(BASE_URL + `/login/google?code=${code}`)
@@ -27,14 +15,14 @@ const api = {
    */
   getProducts (graphQLParams, token) {
     return new Promise((resolve, reject) => {
-      fetch(BASE_URL + '/offerList', {
+      fetch(BASE_URL + '/shopee', {
         method: 'POST',
         body: JSON.stringify({
-          payload: graphQLParams,
-          token: token
+          payload: graphQLParams
         }),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         }
       }).then(j => j.json())
       .then(data => resolve(data))

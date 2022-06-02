@@ -21,7 +21,9 @@ export default {
         if (res.err) {
           detail.value = res.err.detail
         } else {
-          store.token = res
+          store.token = res.accessToken
+          store.name = res.name
+          store.picture = res.picture
           router.replace('/b')
         }
       })
