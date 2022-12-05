@@ -1,5 +1,5 @@
 <script setup>
-import HeaderWrapper from './components/HeaderWrapper.vue'
+import HeaderWrapper from './components/headerWrapper.vue'
 </script>
 
 <template>
