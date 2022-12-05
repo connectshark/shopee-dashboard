@@ -30,10 +30,15 @@ const useFetch = () => {
         Authorization: `Bearer ${store.token}`
       }
     })
+    if (fetch_response.status === 403) {
+      loading.value = false
+      error.value = 'token 過期,請重新登入'
+      return
+    }
     const res = await fetch_response.json()
     loading.value = false
     if (res.errors) {
-      error.value = true
+      error.value = res.errors[0].message
     }
     if (res.data) {
       result.value = [...result.value, ...res.data.conversionReport.nodes]

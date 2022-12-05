@@ -29,8 +29,16 @@ const router = createRouter({
         return {
           accessToken: route.query.accessToken,
           username: route.query.username,
-          avatar: route.query.avatar
+          avatar: route.query.avatar,
+          error: route.query.error,
+          detail: route.query.detail
         }
+      }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: {
+        name: 'login'
       }
     }
   ]

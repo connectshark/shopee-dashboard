@@ -1,6 +1,6 @@
 <template>
   <main class="w-4/5 mx-auto text-center">
-    <a class=" bg-slate-400 p-4 rounded-2xl inline-block text-white hover:opacity-70" :href="url">登入按鈕</a>
+    <a class=" bg-[#4081EC] p-4 rounded-2xl inline-block text-white hover:opacity-70" :href="url">Google Login</a>
   </main>
 </template>
 

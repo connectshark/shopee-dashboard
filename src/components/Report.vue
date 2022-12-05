@@ -14,7 +14,10 @@
       
     </p>
     <p class=" text-sm">
-      訂單編號 {{ props.checkoutId }} <i @click="(isShow = !isShow)" :class="!isShow ? 'bx-down-arrow' : 'bx-up-arrow'" class='bx bx-border hover:text-primary text-md'></i>
+      訂單編號 {{ props.checkoutId }}
+      <button class="group border hover:border-primary border-stone-700 rounded-xl w-8 h-8" type="button" @click="(isShow = !isShow)">
+        <i :class="!isShow ? 'bx-down-arrow' : 'bx-up-arrow'" class='bx group-hover:text-primary text-xl align-middle'></i>
+      </button> 
     </p>
     <ul class="text-sm" v-if="isShow">
       <li v-for="order in props.orders" :key="order.orderId">

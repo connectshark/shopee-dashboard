@@ -32,6 +32,7 @@
         :utmContent="report.utmContent"
       />
       <li v-if="error" class=" md:col-span-2 lg:col-span-3 text-center">
+        <p>{{ error }}</p>
         <button @click="reload()" class="text-stone-500 leading-loose bg-stone-200 hover:bg-stone-300 p-1 rounded-xl transition" type="button">重新整理</button>
       </li>
       <li v-if="loading" class=" md:col-span-2 lg:col-span-3 text-center">
@@ -49,7 +50,7 @@
 <script setup>
 import { useFetch } from '../composable/api-core'
 import Report from '../components/Report.vue'
-import { computed } from '@vue/reactivity'
+import { computed } from 'vue'
 
 const {
   result,
