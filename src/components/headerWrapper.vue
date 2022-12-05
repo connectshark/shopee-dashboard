@@ -1,24 +1,22 @@
 <template>
-  <header class="border-b border-gray-300 py-4">
-    <div class="mx-auto w-11/12 flex items-center justify-between md:w-10/12 max-w-screen-xl">
-      <h1>
-        <router-link to="/" class=" font-bold"><i class='bx bx-chalkboard'></i>蝦皮電台</router-link>
-      </h1>
-      <template v-if="store.picture">
-        <figure>
-          <img class=" inline-block w-4 align-middle" @error="$event.target.src = 'https://picsum.photos/16/16'" :src="store.picture" :alt="store.name">
-          <p class=" inline-block align-middle">{{ store.name }}</p>
-        </figure>
-      </template>
-      <div v-else>
-        <router-link to="/login"><i class='bx bx-log-in'></i>登入</router-link>
-      </div>
+  <header class="bg-white/60">
+    <div class="w-11/12 mx-auto max-w-6xl p-4 flex items-center justify-between">
+      <router-link class=" text-xl" to="/">蝦皮分潤後台</router-link>
+      <button v-if="store.token" @click="logout" class="text-stone-500 bg-stone-200 hover:bg-stone-300 p-1 rounded-xl transition" type="button">登出</button>
     </div>
   </header>
 </template>
 
 <script setup>
-import { useInfoStore } from '../stores/info'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user'
+const router = useRouter()
+const store = useUserStore()
+const logout = () => {
+  store.token = ''
+  store.username = ''
+  store.avatar = ''
+  router.push('/login')
+}
 
-const store = useInfoStore()
 </script>

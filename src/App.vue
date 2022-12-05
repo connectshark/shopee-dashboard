@@ -1,10 +1,8 @@
 <script setup>
-import HeaderWrapper from './components/headerWrapper.vue'
+import HeaderWrapper from './components/HeaderWrapper.vue'
 </script>
 
 <template>
   <HeaderWrapper/>
-  <main>
-    <router-view />
-  </main>
+  <router-view />
 </template>

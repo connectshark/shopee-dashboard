@@ -1,4 +1,4 @@
-# shopee-dashboard-v2
+# 蝦皮後台
 [![GitHub last commit](https://img.shields.io/github/last-commit/connectshark/shopee-dashboard-v2.svg?style=flat)](https://github.com/connectshark/shopee-dashboard-v2)
 ![GitHub stars](https://img.shields.io/github/stars/connectshark/shopee-dashboard-v2.svg?style=social&label=Stars&style=plastic)
 

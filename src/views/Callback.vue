@@ -1,37 +1,17 @@
 <template>
-  <div>
-    <p v-if="detail">{{ detail }}</p>
-    <p v-else><i class='bx bx-loader-alt bx-spin' ></i></p>
+  <div class="min-h-screen">
+    <h1>登入中...</h1>
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useInfoStore } from '../stores/info'
-import api from '../utils/api'
-export default {
-  setup () {
-    const detail = ref('')
-    const store = useInfoStore()
-    const route = useRoute()
-    const router = useRouter()
-    api.oauthLogin(route.query.code)
-      .then(res => {
-        if (res.err) {
-          detail.value = res.err.detail
-        } else {
-          store.token = res.accessToken
-          store.name = res.name
-          store.picture = res.picture
-          router.replace('/b')
-        }
-      })
-    
-
-    return {
-      detail
-    }
-  }
-}
+<script setup>
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user'
+const props = defineProps(['accessToken', 'avatar', 'username'])
+const store = useUserStore()
+store.token = props.accessToken
+store.username = props.username
+store.avatar = props.avatar
+const router = useRouter()
+router.replace('/')
 </script>
