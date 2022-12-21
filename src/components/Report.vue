@@ -5,6 +5,8 @@
         <span>{{ formattedTime }}</span>
         <span> 裝置 </span>
         <i class='bx' :class="formattedDevice"></i>
+        <i class='bx bx-mouse-alt' ></i>
+        <span>{{ formattedClickTime }}</span>
       </p>
       <span><i class='bx bx-dollar'></i>{{ props.estimatedTotalCommission }}</span>
     </div>
@@ -15,8 +17,8 @@
     </p>
     <p class=" text-sm">
       訂單編號 {{ props.checkoutId }}
-      <button class="group border hover:border-primary border-stone-700 rounded-xl w-8 h-8" type="button" @click="(isShow = !isShow)">
-        <i :class="!isShow ? 'bx-down-arrow' : 'bx-up-arrow'" class='bx group-hover:text-primary text-xl align-middle'></i>
+      <button class="group border border-primary text-primary rounded-xl w-8 h-8" type="button" @click="(isShow = !isShow)">
+        <i :class="!isShow ? 'bx-down-arrow' : 'bx-up-arrow'" class='bx text-xl align-middle'></i>
       </button> 
     </p>
     <ul class="text-sm" v-if="isShow">
@@ -30,12 +32,17 @@
             <a class=" hover:text-primary" :href="'https://shopee.tw/shop/' + item.shopId" target="_blank" rel="noopener noreferrer">
               <i class='bx bx-store' ></i>{{ item.shopName }} <i class='bx bx-link-external'></i>
             </a>
-            <p class=" w-11/12 mx-auto" :title="item.itemName">
+            <p class=" w-11/12 mx-auto space-x-1 text-primary" :title="item.itemName">
               <a :href="'https://shopee.tw/product/' + item.shopId + '/' + item.itemId" target="_blank" rel="noopener noreferrer">
                 <img class="h-10 w-10 align-middle object-cover rounded-md inline-block mr-4" :src="item.imageUrl" :alt="item.itemName">
               </a>
+              <span class=" inline-block align-middle"><i class='bx bxs-discount' ></i>{{ item.itemShopeeCommissionRate }}</span>
               <span class=" inline-block align-middle"><i class='bx bx-badge' ></i>{{ item.qty }}</span>
               <span class=" inline-block align-middle"><i class='bx bx-dollar'></i>{{ item.itemPrice }}</span>
+            </p>
+            <p v-if="item.fraudReason" class=" w-11/12 mx-auto space-x-1 text-primary" :title="item.itemName">
+              <span class=" inline-block align-middle">{{ item.fraudStatus }}</span>
+              <span class=" inline-block align-middle">{{ item.fraudReason }}</span>
             </p>
           </li>
         </ul>
@@ -57,10 +64,13 @@ const props = defineProps({
   referrer: String,
   device: String,
   orders: Array,
-  utmContent: String
+  utmContent: String,
+  clickTime: Number
 })
 const formattedTime = useDateFormat(new Date(props.purchaseTime * 1000), 'M/D HH:mm')
 const formattedDevice = computed(() => {
   return props.device === 'APP' ? `bx-mobile` : `bx-desktop`
 })
+
+const formattedClickTime = useDateFormat(new Date(props.clickTime * 1000), 'M/D HH:mm')
 </script>

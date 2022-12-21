@@ -1,12 +1,15 @@
 import { onMounted, ref } from 'vue'
 import { useUserStore } from '../stores/user'
-import resentQuery from '../graphql/resent'
 import { useTimeout } from '@vueuse/core'
+import useGraphql from './useGraphql'
 
 const BASE_URL = import.meta.env.VITE_API_URL
 
 const useFetch = () => {
   const store = useUserStore()
+  const {
+    queryReport
+  } = useGraphql()
   
   const loading = ref(false)
   const result = ref([])
@@ -54,7 +57,7 @@ const useFetch = () => {
   const reload = () => {
     result.value = []
     scrollId.value = ''
-    const graphQLParams = resentQuery()
+    const graphQLParams = useGraphql()
     doFetch(graphQLParams)
   }
 
@@ -62,17 +65,20 @@ const useFetch = () => {
    * 讀取更多內容
    */
   const loadMore = () => {
-    let purchaseTime = null
+    let purchaseTimeEnd = null
     if (ready.value) {
       scrollId.value = ''
-      purchaseTime = result.value[result.value.length - 1].purchaseTime
+      purchaseTimeEnd = result.value[result.value.length - 1].purchaseTime
     }
-    const graphQLParams = resentQuery(scrollId.value, purchaseTime)
+    const graphQLParams = queryReport({
+      scrollId: `"${scrollId.value}"`,
+      purchaseTimeEnd
+    })
     doFetch(graphQLParams)
   }
 
   const init = () => {
-    const graphQLParams = resentQuery()
+    const graphQLParams = queryReport()
     doFetch(graphQLParams)
   }
 
