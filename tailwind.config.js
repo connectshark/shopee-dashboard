@@ -8,10 +8,10 @@ module.exports = {
       colors: {
         primary: 'rgb(var(--color-primary) / <alpha-value>)'
       },
-      fontFamily: {
-        'noto': ['Poppins', 'Noto Sans TC', 'sans-serif']
-      }
     },
+    fontFamily: {
+      'ubuntu': [`'Ubuntu'`, `'Noto Sans TC'`, 'sans-serif', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas']
+    }
   },
   plugins: [],
 }

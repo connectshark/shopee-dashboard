@@ -22,14 +22,7 @@
     <Report
       v-for="report in result"
       :key="report.checkoutId"
-      :purchaseTime="report.purchaseTime"
-      :estimatedTotalCommission="report.estimatedTotalCommission"
-      :checkoutId="report.checkoutId"
-      :referrer="report.referrer"
-      :device="report.device"
-      :orders="report.orders"
-      :utmContent="report.utmContent"
-      :clickTime="report.clickTime"
+      :report="report"
     />
     <li v-if="error" class=" md:col-span-2 lg:col-span-3 text-center">
       <p>{{ error }}</p>
@@ -62,18 +55,18 @@ const {
 
 const totalCommission = computed(() => {
   return result.value.reduce((sum, item) => {
-    return sum += parseFloat(item.estimatedTotalCommission)
+    return sum += parseFloat(item.totalCommission)
   }, 0)
 })
 
 const totalDevice = computed(() => {
   return result.value.reduce((sum, item) => {
-    if (!sum[item.device]) {
-      sum[item.device] = 0
-    }
     sum[item.device]++
     return sum
-  }, {})
+  }, {
+    WEB: 0,
+    APP: 0
+  })
 })
 
 </script>

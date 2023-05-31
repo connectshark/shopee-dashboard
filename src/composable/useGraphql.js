@@ -13,43 +13,47 @@ const useGraphql = () => {
             hasNextPage
           }
           nodes {
-            estimatedTotalCommission
-            totalBrandCommission
-            device
-            purchaseTime
-            utmContent
-            checkoutId
-            referrer
-            productType
-            conversionId
-            conversionStatus
             clickTime
+            purchaseTime
+            conversionId
             shopeeCommissionCapped
             sellerCommission
             totalCommission
+            buyerType
+            utmContent
+            device
+            productType
+            referrer
             orders {
               orderId
               shopType
+              orderStatus
               items {
                 shopId
                 shopName
                 completeTime
+                promotionId
+                modelId
                 itemId
                 itemName
                 itemPrice
-                itemCommission
+                actualAmount
+                refundAmount
                 qty
                 imageUrl
-                fraudStatus
-                fraudReason
                 itemTotalCommission
                 itemSellerCommission
+                itemSellerCommissionRate
                 itemShopeeCommissionCapped
                 itemShopeeCommissionRate
                 itemNotes
+                globalCategoryLv1Name
+                globalCategoryLv2Name
+                globalCategoryLv3Name
                 fraudStatus
-                modelId
-                promotionId
+                fraudReason
+                attributionType
+                channelType
               }
             }
           }
